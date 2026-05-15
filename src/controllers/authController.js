@@ -1,4 +1,4 @@
-const users = require('../dao/userDao');
+const userDao = require('../dao/userDao');
 const authController = {
     login: async(request,response) =>{
         const {email,password} = request.body;
@@ -7,8 +7,10 @@ const authController = {
                 message:'Email and password are required'
             });
         }
-        const user = users.find(u=>u.email === email && u.password === password);
-        if(user){
+        //const user = users.find(u=>u.email === email && u.password === password);
+        const user = await userDao.findByEmail(email);
+
+        if(user && user.password==password){
             return response.status(200).json({
                 message:"User authenticated",
                 user:user
@@ -33,25 +35,22 @@ const authController = {
          * exists in the users object!
          */
 
-        const user = users.find(u=>u.email === email);
+        //const user = users.find(u=>u.email === email);
+        const user = await userDao.findByEmail(email);
+
         if(user){
             return response.status(400).json({
-                message:'User alreadyexist with email: ${email}'
+                message:`User already exist with email: ${email}`
             })
         }
 
-        const newUser = {
-            id:users.length+1,
-            name:name,
-            email:email,
-            password:password        
-        };
+        //users.push(newUser);
 
-        users.push(newUser);
+        const registeredUser = await userDao.create(email,name,password);
 
         return response.status(200).json({
             message: 'User registered',
-            user:{ id:newUser.id}
+            user:{ id:registeredUser._id}
         });
     }
 }
