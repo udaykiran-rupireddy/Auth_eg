@@ -8,7 +8,6 @@ const userDao = {
         });
         return await newUser.save();
     },
-
     findByEmail: async (email) =>{
         const user = await User.findOne({email});
         return user;

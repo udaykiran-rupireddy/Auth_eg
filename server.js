@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const authRoutes = require('./src/routes/authRoutes');
+const trainerRoutes = require('./src/routes/trainerRoutes');
 
 console.log(process.env.MONGO_DB_CONNECTION_URL);
 mongoose.connect(process.env.MONGO_DB_CONNECTION_URL)
@@ -12,6 +13,7 @@ mongoose.connect(process.env.MONGO_DB_CONNECTION_URL)
 app.use(express.json()); //Middleware
 
 app.use('/auth',authRoutes); // /auth/login & /auth/register
+app.use('/trainer',trainerRoutes);
 
 app.listen(5001,()=>{
     console.log("Server is running on port 5001");
