@@ -45,36 +45,12 @@ const trainerController = {
             trainer:{ id:registeredtrainer._id}
         });
     },
-    work:async(request,response)=>{
-        const{college,subject,time} = request.body;
-        if(!college||!subject||!time){
-            return response.status(400).json({
-                message: 'college,subject,time are required'
-            });
-        }
-        const registeredwork = await trainerDao.creatework(college,subject,time);
-
-        return response.status(200).json({
-            message: "work data registered",
-            work:{id:registeredwork._id}
-        });
-    },
     show:async(request,response)=>{
         const trainers = await trainerDao.show();
         return response.status(200).json({
             message: 'all registered trainers are listed',
             trainers: trainers
         });
-    },
-    delete:async(request,response)=>{
-        const{time} = request.body;
-        if(!time){
-            return response.status(400).json({
-                message: 'time is required'
-            });
-        }
-        await trainerDao.deletework(time);
-        return response.status(200).json({ message: 'Work deleted successfully' });
     }
 }
 module.exports = trainerController;
